@@ -1,0 +1,96 @@
+---
+title: Java Concurrency — CountDownLatch & CyclicBarrier
+date: 2025-03-01
+excerpt: Understanding thread coordination in Java using latches and barriers with practical examples.
+tags: [java, performance, design]
+---
+
+## Why Latches?
+
+Java's `java.util.concurrent` package provides two powerful synchronizers for coordinating threads: `CountDownLatch` and `CyclicBarrier`. Both solve the "wait for X before proceeding" problem, but with different semantics.
+
+### CountDownLatch
+
+A latch that blocks threads until a count reaches zero. It's a one-shot gate — once open, it stays open.
+
+```java
+import java.util.concurrent.CountDownLatch;
+
+public class DataLoader {
+    public static void main(String[] args) throws InterruptedException {
+        int workers = 3;
+        CountDownLatch latch = new CountDownLatch(workers);
+
+        for (int i = 1; i <= workers; i++) {
+            final int id = i;
+            new Thread(() -> {
+                try {
+                    System.out.println("Worker " + id + " loading data...");
+                    Thread.sleep((long) (Math.random() * 2000));
+                    System.out.println("Worker " + id + " done");
+                    latch.countDown();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }).start();
+        }
+
+        latch.await(); // blocks main thread until all workers finish
+        System.out.println("All workers done. Proceeding with main.");
+    }
+}
+```
+
+### CyclicBarrier
+
+A reusable barrier where threads wait for each other at a common point. When all arrive, a barrier action runs, then they all proceed.
+
+```java
+import java.util.concurrent.BrokenBarrierException;
+import java.util.concurrent.CyclicBarrier;
+
+public class Simulator {
+    public static void main(String[] args) {
+        int parties = 4;
+        CyclicBarrier barrier = new CyclicBarrier(parties, () ->
+            System.out.println("=== All threads synced ===")
+        );
+
+        for (int i = 1; i <= parties; i++) {
+            final int id = i;
+            new Thread(() -> {
+                try {
+                    System.out.println("Thread " + id + " at phase 1");
+                    Thread.sleep((long) (Math.random() * 1000));
+                    barrier.await();
+
+                    System.out.println("Thread " + id + " at phase 2");
+                    Thread.sleep((long) (Math.random() * 1000));
+                    barrier.await();
+
+                    System.out.println("Thread " + id + " done");
+                } catch (InterruptedException | BrokenBarrierException e) {
+                    Thread.currentThread().interrupt();
+                }
+            }).start();
+        }
+    }
+}
+```
+
+### Key Differences
+
+```text
+┌─────────────────┬──────────────────────┬──────────────────────┐
+│                 │   CountDownLatch     │    CyclicBarrier     │
+├─────────────────┼──────────────────────┼──────────────────────┤
+│ Reusable        │     No (one-shot)    │     Yes (reset)      │
+│ Threads wait    │     for count=0      │     for all parties  │
+│ Barrier action  │     not supported    │     on arrival       │
+│ Use case        │     startup sync     │     phased compute   │
+└─────────────────┴──────────────────────┴──────────────────────┘
+```
+
+### When to Use What
+
+Use **CountDownLatch** when you need one or more threads to wait for a set of operations to complete. Use **CyclicBarrier** when you have multiple threads that must synchronize at intermediate points in a multi-phase computation.

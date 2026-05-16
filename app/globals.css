@@ -1,0 +1,213 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-inter: 'Inter', sans-serif;
+  --font-sora: 'Sora', sans-serif;
+  
+  --spacing-bento-gap: 1.5rem;
+  --spacing-margin-mobile: 1rem;
+  --spacing-margin-desktop: 2rem;
+  
+  --color-background: #0a0a0a;
+  --color-surface: #131313;
+  --color-surface-dim: #131313;
+  --color-surface-bright: #393939;
+  --color-surface-container-lowest: #0e0e0e;
+  --color-surface-container-low: #1b1b1b;
+  --color-surface-container: #1f1f1f;
+  --color-surface-container-high: #2a2a2a;
+  --color-surface-container-highest: #353535;
+  --color-on-surface: #e2e2e2;
+  --color-on-surface-variant: #cbc3d7;
+  --color-inverse-surface: #e2e2e2;
+  --color-inverse-on-surface: #303030;
+  --color-outline: #958ea0;
+  --color-outline-variant: #494454;
+  --color-surface-tint: #d0bcff;
+  --color-primary: #d0bcff;
+  --color-on-primary: #3c0091;
+  --color-primary-container: #a078ff;
+  --color-on-primary-container: #340080;
+  --color-inverse-primary: #6d3bd7;
+  --color-primary-fixed: #e9ddff;
+  --color-primary-fixed-dim: #d0bcff;
+  --color-on-primary-fixed: #23005c;
+  --color-on-primary-fixed-variant: #5516be;
+  --color-secondary: #e9c349;
+  --color-on-secondary: #3c2f00;
+  --color-secondary-container: #af8d11;
+  --color-on-secondary-container: #342800;
+  --color-secondary-fixed: #ffe088;
+  --color-secondary-fixed-dim: #e9c349;
+  --color-on-secondary-fixed: #241a00;
+  --color-on-secondary-fixed-variant: #574500;
+  --color-tertiary: #d3bbff;
+  --color-on-tertiary: #3f0689;
+  --color-tertiary-container: #a37af1;
+  --color-on-tertiary-container: #37007c;
+  --color-tertiary-fixed: #ebdcff;
+  --color-tertiary-fixed-dim: #d3bbff;
+  --color-on-tertiary-fixed: #260059;
+  --color-on-tertiary-fixed-variant: #572ba0;
+  --color-error: #ffb4ab;
+  --color-on-error: #690005;
+  --color-error-container: #93000a;
+  --color-on-error-container: #ffdad6;
+  --color-foreground: #e2e2e2;
+}
+
+body {
+  background-color: rgb(var(--color-background));
+}
+
+/* Terminal Card Styling */
+.terminal-card {
+  background: rgba(20, 20, 20, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(208, 188, 255, 0.1);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.5);
+}
+
+.terminal-header {
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  position: relative;
+}
+
+/* Interactive Border Shine Effect */
+@media (min-width: 768px) {
+  .terminal-header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: radial-gradient(
+      circle at var(--header-mouse-x, 50%) 50%,
+      rgba(208, 188, 255, 0.8) 0%,
+      rgba(208, 188, 255, 0) 150px
+    );
+    opacity: 1;
+    pointer-events: none;
+    z-index: 10;
+  }
+
+  /* Variation for secondary theme cards */
+  .glow-border-secondary .terminal-header::after {
+    background: radial-gradient(
+      circle at var(--header-mouse-x, 50%) 50%,
+      rgba(233, 195, 73, 0.8) 0%,
+      rgba(233, 195, 73, 0) 150px
+    );
+  }
+}
+
+.glow-border-primary {
+  border: 1px solid rgba(208, 188, 255, 0.2);
+}
+
+.glow-border-secondary {
+  border: 1px solid rgba(233, 195, 73, 0.2);
+}
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  from,
+  to {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 20;
+}
+
+/* Fancy Terminal Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(52, 211, 153, 0.3);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(52, 211, 153, 0.6);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(52, 211, 153, 0.3) rgba(255, 255, 255, 0.03);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Interactive Dot Background */
+#background-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: #0a0a0a;
+  pointer-events: none;
+}
+
+section.terminal-card {
+  position: relative;
+  overflow: hidden;
+}
+
+section.terminal-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(208, 188, 255, 0.05) 0%,
+    transparent 80%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+section.terminal-card:hover::before {
+  opacity: 1;
+}
+
+@keyframes vertical-progress {
+  from {
+    height: 0%;
+  }
+  to {
+    height: 100%;
+  }
+}
+
+.animate-progress-vertical {
+  animation: vertical-progress 5s linear infinite;
+}
+
+

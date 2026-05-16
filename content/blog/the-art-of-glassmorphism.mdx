@@ -1,0 +1,48 @@
+---
+title: The Art of Glassmorphism
+date: 2024-10-10
+excerpt: Deep dive into creating stunning glassmorphic designs with CSS backdrop-filter and layered shadows.
+tags: [css, design, ui]
+---
+
+## What is Glassmorphism?
+
+Glassmorphism is the design trend that creates a frosted-glass effect — translucent backgrounds with blur, layered over vibrant backdrops.
+
+### The Recipe
+
+The CSS formula is deceptively simple:
+
+```css
+.glass-panel {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+```
+
+### Layering Depth
+
+The illusion of glass works best when elements have clear depth relationships:
+
+```tsx
+interface GlassLayer {
+  depth: number;       // 0-3
+  opacity: number;     // 0.02-0.1
+  blurRadius: number;  // 4-24
+}
+
+const layerConfig: Record<number, GlassLayer> = {
+  0: { depth: 0, opacity: 0.05, blurRadius: 12 },
+  1: { depth: 1, opacity: 0.08, blurRadius: 16 },
+  2: { depth: 2, opacity: 0.1, blurRadius: 20 },
+  3: { depth: 3, opacity: 0.12, blurRadius: 24 },
+};
+```
+
+### When to Use It
+
+Glassmorphism works beautifully for cards, modals, navigation bars, and overlays. The key is restraint — use it sparingly to create hierarchy without overwhelming the user.

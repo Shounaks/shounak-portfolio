@@ -1,0 +1,66 @@
+---
+title: Optimizing Next.js Apps
+date: 2024-09-05
+excerpt: A practical guide to improving your Next.js app performance — from image optimization to server components.
+tags: [nextjs, performance, react]
+---
+
+## Performance Matters
+
+Next.js gives you a lot out of the box, but truly fast applications require intentional optimization.
+
+### Image Optimization
+
+Next.js `<Image>` component is your first line of defense:
+
+```tsx
+import Image from 'next/image';
+
+export function Hero() {
+  return (
+    <Image
+      src="/hero.webp"
+      alt="Hero"
+      width={1200}
+      height={600}
+      priority
+      placeholder="blur"
+      blurDataURL="data:image/webp;base64,..."
+      sizes="(max-width: 768px) 100vw, 1200px"
+    />
+  );
+}
+```
+
+### Server Components
+
+Move data fetching and rendering to the server whenever possible:
+
+```tsx
+// app/posts/page.tsx — Server Component
+import { PostsList } from './posts-list';
+
+export default async function PostsPage() {
+  const posts = await fetchPosts();
+
+  return (
+    <main>
+      <h1>Posts</h1>
+      <PostsList posts={posts} />
+    </main>
+  );
+}
+```
+
+### Bundle Analysis
+
+Use `@next/bundle-analyzer` to identify large dependencies. Code-split heavy libraries using dynamic imports with named exports:
+
+```tsx
+const Chart = dynamic(() => import('@/components/chart'), {
+  ssr: false,
+  loading: () => <Skeleton />,
+});
+```
+
+Small changes compound into massive improvements. Start with images, then server components, then bundle splitting.

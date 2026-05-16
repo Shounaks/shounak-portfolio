@@ -1,0 +1,48 @@
+---
+title: Building Terminal UIs with React
+date: 2024-12-15
+excerpt: How I approach creating immersive terminal-inspired interfaces using React, Tailwind, and a lot of CSS tricks.
+tags: [react, css, ui]
+---
+
+## Terminal UI Philosophy
+
+Building terminal-inspired interfaces is about more than just using a dark background and a monospace font. It's about embracing the constraints and aesthetic of the command line while delivering a modern, interactive experience.
+
+### The Foundation
+
+Every terminal UI starts with three core elements:
+
+```css
+.terminal-card {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: 'JetBrains Mono', monospace;
+}
+```
+
+The key is layering — using backdrop blur, subtle borders, and careful opacity to create depth without violating the flat, utilitarian feel of a real terminal.
+
+### Interaction Patterns
+
+Terminal UIs shine with keyboard-first interactions:
+
+```tsx
+export function useTerminalInput() {
+  const [buffer, setBuffer] = useState('');
+  const [history, setHistory] = useState<string[]>([]);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      setHistory(h => [...h, buffer]);
+      setBuffer('');
+    }
+  };
+
+  return { buffer, setBuffer, history, handleKeyDown };
+}
+```
+
+### Bringing It Together
+
+The result is a UI that feels both nostalgic and forward-thinking — familiar to developers while being approachable to anyone who appreciates clean, purposeful design.

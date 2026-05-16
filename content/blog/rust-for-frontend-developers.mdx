@@ -1,0 +1,51 @@
+---
+title: Rust for Frontend Developers
+date: 2024-11-28
+excerpt: Why every frontend engineer should give Rust a shot — memory safety, speed, and WebAssembly integration.
+tags: [rust, wasm, performance]
+---
+
+## Why Rust?
+
+As frontend developers, we're comfortable with JavaScript's flexibility. But as applications grow, so do the pain points — runtime errors, unpredictable performance, and the constant dance with the garbage collector.
+
+### Enter Rust
+
+Rust offers a compelling alternative for performance-critical pieces of your frontend stack:
+
+```rust
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+pub struct ImageProcessor {
+    width: u32,
+    height: u32,
+}
+
+#[wasm_bindgen]
+impl ImageProcessor {
+    pub fn new(width: u32, height: u32) -> Self {
+        Self { width, height }
+    }
+
+    pub fn grayscale(&self, pixels: &[u8]) -> Vec<u8> {
+        pixels
+            .chunks(4)
+            .map(|chunk| {
+                let r = chunk[0] as f32;
+                let g = chunk[1] as f32;
+                let b = chunk[2] as f32;
+                let gray = (0.299 * r + 0.587 * g + 0.114 * b) as u8;
+                [gray, gray, gray, chunk[3]]
+            })
+            .flatten()
+            .collect()
+    }
+}
+```
+
+### The Bridge
+
+Wasm compiles to a binary format that runs at near-native speed. Integrating it with your React app is straightforward using `@wasm-tool/wasm-pack-plugin`.
+
+If you haven't tried Rust yet, start with a small performance-critical module — image processing, data parsing, or a complex computation — and work your way up from there.
