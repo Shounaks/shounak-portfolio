@@ -24,7 +24,8 @@ function tagClass(tag: string) {
 }
 
 export default function BlogPage() {
-  const years = [...new Set(posts.map(p => p.date.slice(0, 4)))].sort((a, b) => b.localeCompare(a));
+  const visible = posts.filter(p => !p.hidden);
+  const years = [...new Set(visible.map(p => p.date.slice(0, 4)))].sort((a, b) => b.localeCompare(a));
 
   return (
     <>
@@ -50,7 +51,7 @@ export default function BlogPage() {
               <span className="h-px flex-1 bg-emerald-500/10"></span>
             </div>
             <div className="space-y-5">
-              {posts.filter(p => p.date.startsWith(year)).map((post) => (
+              {visible.filter(p => p.date.startsWith(year)).map((post) => (
                 <Link key={post.slug} href={`/blog/${post.slug}`} className="block group">
                   <TerminalCard variant="primary" className="!bg-black">
                     <div className="p-6 font-mono flex flex-col gap-3">

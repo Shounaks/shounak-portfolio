@@ -79,7 +79,7 @@ export function ProjectsSection() {
                         <span className="material-symbols-outlined text-[10px]">link</span>
                       </span>
                       <span className="text-white/40 text-[9px]">repo:</span>
-                      <span className="text-amber-400/80 text-[10px] underline underline-offset-2">{project.link}</span>
+                      <a href={`https://${project.link}`} target="_blank" rel="noopener noreferrer" className="text-amber-400/80 text-[10px] underline underline-offset-2 hover:text-amber-300 transition-colors">{project.link}</a>
                     </div>
                     <div className="px-1 py-1">
                       <span className="text-white/40 text-[9px] block mb-1">description:</span>

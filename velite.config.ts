@@ -15,6 +15,7 @@ export const posts = defineCollection({
     image: s.string().optional(),
     video: s.string().optional(),
     tags: s.array(s.string()).optional(),
+    hidden: s.boolean().optional(),
     content: s.markdown({
       rehypePlugins: [
         rehypeSlug,

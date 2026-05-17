@@ -974,8 +974,139 @@ export default function TestPage() {
               <span className="text-amber-500/60 text-[9px]">// red → gateway→backend, green → backend→obs + db</span>
             </div>
           </TerminalCard>
+          </div>
+        </section>
 
-          <TerminalCard title="Animated Terminal Output" icon="slideshow" variant="secondary">
+        {/* ── Resume Skills Grid ── */}
+        <section className="mb-12">
+          <div className="flex items-center gap-2 mb-6">
+            <span className="text-emerald-500/60 text-[10px] font-mono">//</span>
+            <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400/80 font-bold">Resume Skills Grid</span>
+          </div>
+          <TerminalCard title="Skills (from PDF)" icon="grid_view" className="w-full">
+            <div className="p-5 font-mono text-[12px] flex flex-col gap-5">
+              <p className="text-white/50 text-[11px] leading-relaxed">
+                Comprehensive skill set extracted from the resume PDF, grouped by domain.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {[
+                  { label: 'Languages', skills: ['Java / Kotlin', 'TypeScript', 'SQL', 'HTML / CSS / JS', 'Python', 'Groovy'], color: 'cyan' },
+                  { label: 'Backend Frameworks', skills: ['Spring Boot', 'Hibernate / JPA', 'Node.js', 'Swagger', 'JUnit', 'Mockito'], color: 'sky' },
+                  { label: 'Frontend', skills: ['Angular', 'AstroJS', 'SolidStart', 'Tailwind CSS', 'React'], color: 'amber' },
+                  { label: 'Cybersecurity', skills: ['Wireshark', 'OWASP ZAP', 'Burp Suite', 'Nmap', 'Security Onion', 'Autopsy', 'Volatility3', 'SonarQube', 'Keycloak'], color: 'rose' },
+                  { label: 'DevSecOps', skills: ['Docker', 'Kubernetes', 'Jenkins', 'Istio', 'Kafka / SNS', 'Terraform', 'GraphQL'], color: 'purple' },
+                  { label: 'Cloud — AWS', skills: ['EC2', 'ECS', 'EKS', 'S3', 'API Gateway', 'Lambda'], color: 'orange' },
+                  { label: 'Cloud — GCP', skills: ['Compute', 'Cloud SQL', 'Firebase', 'Logging'], color: 'blue' },
+                  { label: 'Cloud — Azure', skills: ['Service Bus', 'Cosmos DB', 'SQL', 'API Management', 'Credentials Manager'], color: 'indigo' },
+                  { label: 'Developer Tools', skills: ['IntelliJ', 'VS Code', 'PyCharm', 'Git', 'Eclipse', 'Beyond Compare'], color: 'slate' },
+                  { label: 'Machine Learning', skills: ['PyTorch', 'Scikit-learn', 'pandas', 'NumPy', 'Matplotlib', 'Seaborn'], color: 'emerald' },
+                ].map((group) => {
+                  const colorMap: Record<string, { text: string; border: string; bg: string; badge: string }> = {
+                    cyan: { text: 'text-cyan-400', border: 'border-cyan-500/25', bg: 'bg-cyan-500/5', badge: 'text-cyan-300 bg-cyan-500/10 border-cyan-500/20' },
+                    sky: { text: 'text-sky-400', border: 'border-sky-500/25', bg: 'bg-sky-500/5', badge: 'text-sky-300 bg-sky-500/10 border-sky-500/20' },
+                    amber: { text: 'text-amber-400', border: 'border-amber-500/25', bg: 'bg-amber-500/5', badge: 'text-amber-300 bg-amber-500/10 border-amber-500/20' },
+                    rose: { text: 'text-rose-400', border: 'border-rose-500/25', bg: 'bg-rose-500/5', badge: 'text-rose-300 bg-rose-500/10 border-rose-500/20' },
+                    purple: { text: 'text-purple-400', border: 'border-purple-500/25', bg: 'bg-purple-500/5', badge: 'text-purple-300 bg-purple-500/10 border-purple-500/20' },
+                    orange: { text: 'text-orange-400', border: 'border-orange-500/25', bg: 'bg-orange-500/5', badge: 'text-orange-300 bg-orange-500/10 border-orange-500/20' },
+                    blue: { text: 'text-blue-400', border: 'border-blue-500/25', bg: 'bg-blue-500/5', badge: 'text-blue-300 bg-blue-500/10 border-blue-500/20' },
+                    indigo: { text: 'text-indigo-400', border: 'border-indigo-500/25', bg: 'bg-indigo-500/5', badge: 'text-indigo-300 bg-indigo-500/10 border-indigo-500/20' },
+                    slate: { text: 'text-slate-400', border: 'border-slate-500/25', bg: 'bg-slate-500/5', badge: 'text-slate-300 bg-slate-500/10 border-slate-500/20' },
+                    emerald: { text: 'text-emerald-400', border: 'border-emerald-500/25', bg: 'bg-emerald-500/5', badge: 'text-emerald-300 bg-emerald-500/10 border-emerald-500/20' },
+                  };
+                  const c = colorMap[group.color] || colorMap.slate;
+                  return (
+                    <div key={group.label} className={`${c.bg} ${c.border} border rounded-lg p-4 space-y-2`}>
+                      <div className={`${c.text} text-[10px] uppercase tracking-widest font-bold`}>{group.label}</div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {group.skills.map((s) => (
+                          <span key={s} className={`${c.badge} text-[9px] px-2 py-0.5 rounded border font-mono tracking-tight`}>
+                            {s}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <span className="text-amber-500/60 text-[9px]">// 50+ skills across 10 domains extracted from resume PDF</span>
+            </div>
+          </TerminalCard>
+        </section>
+
+        {/* ── Skills Compendium (from ideas.md) ── */}
+        <section className="mb-12">
+          <div className="flex items-center gap-2 mb-6">
+            <span className="text-emerald-500/60 text-[10px] font-mono">//</span>
+            <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-400/80 font-bold">Skills Compendium Dashboard</span>
+          </div>
+          <TerminalCard title="SKILLS COMPENDIUM" icon="category" className="w-full">
+            <div className="p-5 font-mono text-[12px] flex flex-col gap-5">
+              <p className="text-white/50 text-[11px] leading-relaxed">
+                Glassmorphic skill cards inspired by ideas.md — capability architecture extracted and domain-mapped from profile.
+              </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {[
+                  { label: 'Languages', color: 'cyan', skills: ['Java / Kotlin', 'TypeScript', 'SQL', 'HTML / CSS / JS', 'Groovy'] },
+                  { label: 'Cybersecurity', color: 'rose', skills: ['Wireshark', 'OWASP ZAP', 'Burp Suite', 'Nmap', 'Autopsy', 'SonarQube'] },
+                  { label: 'Cloud — GCP', color: 'blue', skills: ['Compute', 'Cloud SQL', 'Firebase', 'Logging'], mini: true },
+                  { label: 'Backend Frameworks', color: 'emerald', skills: ['Spring Boot', 'Hibernate / JPA', 'Node.js', 'Swagger', 'Mockito'] },
+                  { label: 'DevSecOps', color: 'purple', skills: ['Docker', 'Kubernetes', 'Terraform', 'GraphQL'], mini: true },
+                  { label: 'Cloud — Azure', color: 'indigo', skills: ['Service Bus', 'Cosmos DB', 'SQL', 'API Management', 'Credentials Manager'], mini: true },
+                  { label: 'Frontend', color: 'orange', skills: ['Angular', 'AstroJS', 'SolidStart', 'React', 'Tailwind CSS'] },
+                  { label: 'Cloud — AWS', color: 'amber', skills: ['EC2', 'Lambda', 'S3', 'API Gateway'], mini: true },
+                  { label: 'ML / DevTools', color: 'teal', skills: ['PyTorch', 'pandas', 'VS Code', 'Git'], mini: true },
+                ].map((group) => {
+                  const colors: Record<string, { border: string; text: string; glow: string; badge: string }> = {
+                    cyan: { border: 'border-cyan-500/20', text: 'text-cyan-400', glow: 'bg-cyan-500/5', badge: 'bg-cyan-950/60 border-cyan-800/40 text-cyan-300' },
+                    rose: { border: 'border-rose-500/20', text: 'text-rose-400', glow: 'bg-rose-500/5', badge: 'bg-rose-950/60 border-rose-800/40 text-rose-300' },
+                    blue: { border: 'border-blue-500/20', text: 'text-blue-400', glow: 'bg-blue-500/5', badge: 'bg-blue-950/60 border-blue-800/40 text-blue-300' },
+                    emerald: { border: 'border-emerald-500/20', text: 'text-emerald-400', glow: 'bg-emerald-500/5', badge: 'bg-emerald-950/60 border-emerald-800/40 text-emerald-300' },
+                    purple: { border: 'border-purple-500/20', text: 'text-purple-400', glow: 'bg-purple-500/5', badge: 'bg-purple-950/60 border-purple-800/40 text-purple-300' },
+                    indigo: { border: 'border-indigo-500/20', text: 'text-indigo-400', glow: 'bg-indigo-500/5', badge: 'bg-indigo-950/60 border-indigo-800/40 text-indigo-300' },
+                    orange: { border: 'border-orange-500/20', text: 'text-orange-400', glow: 'bg-orange-500/5', badge: 'bg-orange-950/60 border-orange-800/40 text-orange-300' },
+                    amber: { border: 'border-amber-500/20', text: 'text-amber-400', glow: 'bg-amber-500/5', badge: 'bg-amber-950/60 border-amber-800/40 text-amber-300' },
+                    teal: { border: 'border-teal-500/20', text: 'text-teal-400', glow: 'bg-teal-500/5', badge: 'bg-teal-950/60 border-teal-800/40 text-teal-300' },
+                  };
+                  const c = colors[group.color];
+
+                  const badges = group.skills.length > 3
+                    ? group.skills.filter((_, i) => i < 2).map(s => s.split('/')[0].trim())
+                    : [];
+
+                  return (
+                    <div key={group.label} className={`relative overflow-hidden rounded-xl border ${c.border} bg-gradient-to-br from-white/[0.03] to-transparent p-4 backdrop-blur-sm group/card`}>
+                      <div className={`absolute -right-10 -bottom-10 w-32 h-32 ${c.glow} rounded-full blur-2xl pointer-events-none`} />
+                      <div className="flex items-center justify-between mb-3">
+                        <span className={`${c.text} text-[10px] font-bold tracking-widest uppercase`}>{group.label}</span>
+                        {badges.length > 0 && (
+                          <div className="flex gap-1">
+                            {badges.map(b => (
+                              <span key={b} className={`text-[8px] px-1 rounded ${c.badge}`}>{b}</span>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                      <div className={group.mini ? 'flex flex-wrap gap-x-4 gap-y-1.5' : 'space-y-1.5'}>
+                        {group.skills.map(s => (
+                          <div key={s} className={`${group.mini ? 'text-[10px]' : 'text-[10px]'} text-white/50 hover:${c.text} transition-colors cursor-default`}>{s}</div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <span className="text-amber-500/60 text-[9px]">// pipeline graph interpretation compiled successfully — v2.4.0-build-stable</span>
+            </div>
+          </TerminalCard>
+        </section>
+
+        <section className="mb-12">
+          <div className="flex items-center gap-2 mb-6">
+            <span className="text-emerald-500/60 text-[10px] font-mono">//</span>
+            <span className="text-[10px] font-mono uppercase tracking-widest text-white/40 font-bold">Playground</span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <TerminalCard title="Animated Terminal Output" icon="slideshow" variant="secondary">
             <div className="p-5 font-mono text-[12px] flex flex-col gap-3 flex-1">
               <p className="text-white/50 text-[11px] leading-relaxed">
                 Auto-scrolling terminal output with simulated command execution and logs.

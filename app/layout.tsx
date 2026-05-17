@@ -13,21 +13,8 @@ export const metadata: Metadata = {
   description: 'Full Stack Developer & Cybersecurity Expert — 5.5 years designing and shipping production-grade systems at scale.',
   generator: 'opencode.ai',
   icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
+    icon: '/gits_ico.png',
+    apple: '/gits_ico.png',
   },
 }
 

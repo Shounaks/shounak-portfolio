@@ -37,15 +37,6 @@ export function ContactSection() {
             <span className="text-emerald-400">&gt;</span> ENCRYPTION: SHA-256
           </p>
         </div>
-        
-        <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/20 to-transparent">
-          <a
-            href="mailto:shounakbhalerao777@gmail.com"
-            className="block w-full bg-red-500/5 text-red-500 py-2.5 rounded border border-red-500/30 font-bold text-[12px] font-mono uppercase tracking-widest hover:bg-red-500/10 hover:border-red-500/50 transition-all backdrop-blur-sm text-center cursor-pointer"
-          >
-            ./RUN_CONTACT_MODULE.SH
-          </a>
-        </div>
       </div>
     </TerminalCard>
   );

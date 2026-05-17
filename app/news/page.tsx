@@ -4,29 +4,35 @@ import { Footer } from '@/components/footer';
 import { PageTransition } from '@/components/page-transition';
 
 const broadcasts = [
+  // {
+  //   date: '2025-03-20',
+  //   type: 'RELEASE',
+  //   title: 'v2.0 — Hacker UI Showcase Live',
+  //   body: 'Launched the component showcase at /test. Includes sparklines, gauges, matrix rain, typewriter effects, and 20+ terminal-inspired components for the bento grid.',
+  // },
+  // {
+  //   date: '2025-02-14',
+  //   type: 'UPDATE',
+  //   title: 'Portfolio Redesign Complete',
+  //   body: 'Full redesign with glassmorphic bento grid, terminal-themed cards, mouse spotlight effects, and animated skill matrix. Green-on-dark aesthetic throughout.',
+  // },
+  // {
+  //   date: '2025-01-10',
+  //   type: 'PATCH',
+  //   title: 'Performance Optimizations',
+  //   body: 'Reduced bundle size by 40%. Migrated animations to GPU-composited properties. Added scrollbar styling and fixed hydration errors across all routes.',
+  // },
+  // {
+  //   date: '2024-12-01',
+  //   type: 'BROADCAST',
+  //   title: 'Open Source Contributions',
+  //   body: 'Published three new open-source tools for terminal UI enthusiasts. Check out terminal-log, react-glitch-text, and use-typewriter hooks.',
+  // },
   {
-    date: '2025-03-20',
+    date: '2026-05-17',
     type: 'RELEASE',
-    title: 'v2.0 — Hacker UI Showcase Live',
-    body: 'Launched the component showcase at /test. Includes sparklines, gauges, matrix rain, typewriter effects, and 20+ terminal-inspired components for the bento grid.',
-  },
-  {
-    date: '2025-02-14',
-    type: 'UPDATE',
-    title: 'Portfolio Redesign Complete',
-    body: 'Full redesign with glassmorphic bento grid, terminal-themed cards, mouse spotlight effects, and animated skill matrix. Green-on-dark aesthetic throughout.',
-  },
-  {
-    date: '2025-01-10',
-    type: 'PATCH',
-    title: 'Performance Optimizations',
-    body: 'Reduced bundle size by 40%. Migrated animations to GPU-composited properties. Added scrollbar styling and fixed hydration errors across all routes.',
-  },
-  {
-    date: '2024-12-01',
-    type: 'BROADCAST',
-    title: 'Open Source Contributions',
-    body: 'Published three new open-source tools for terminal UI enthusiasts. Check out terminal-log, react-glitch-text, and use-typewriter hooks.',
+    title: 'Portfolio v1.0 — Terminal-Inspired Portfolio Launched',
+    body: 'Shipped a fully responsive, terminal-themed portfolio built with Next.js 16, MDX blog via Velite, animated architecture diagrams, and a hacker-ui component showcase. Features real resume data, 10 LinkedIn testimonials, and bento-grid layout with dynamic breadcrumbs and code diff views.',
   },
 ];
 

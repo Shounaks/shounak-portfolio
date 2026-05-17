@@ -27,13 +27,13 @@ function tagClass(tag: string) {
 }
 
 export function generateStaticParams() {
-  return posts.map((post) => ({ slug: post.slug }));
+  return posts.filter(p => !p.hidden).map((post) => ({ slug: post.slug }));
 }
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = posts.find((p) => p.slug === slug);
-  if (!post) notFound();
+  if (!post || post.hidden) notFound();
 
   return (
     <>
