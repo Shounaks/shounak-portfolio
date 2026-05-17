@@ -4,3 +4,4 @@ node_modules/
 .idea/
 *.local
 *.log
+next-env.d.ts

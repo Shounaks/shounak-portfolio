@@ -6,7 +6,11 @@ import { ContactSection } from './contact-section';
 
 export function TestimonialsSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [showPauseIndicator, setShowPauseIndicator] = useState<'enter' | 'exit' | null>(null);
+  const [isBlurred, setIsBlurred] = useState(false);
   const totalRef = useRef(0);
+  const blurTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const testimonials = [
     {
@@ -64,13 +68,37 @@ export function TestimonialsSection() {
   totalRef.current = testimonials.length;
 
   useEffect(() => {
+    if (isPaused) return;
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % totalRef.current);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [isPaused]);
 
   const current = testimonials[currentIndex];
+
+  function goNext() {
+    setCurrentIndex((prev) => (prev + 1) % totalRef.current);
+  }
+
+  function goPrev() {
+    setCurrentIndex((prev) => (prev - 1 + totalRef.current) % totalRef.current);
+  }
+
+  function togglePause() {
+    setIsPaused((p) => !p);
+    setShowPauseIndicator('enter');
+    setIsBlurred(true);
+    clearTimeout(blurTimerRef.current);
+    blurTimerRef.current = setTimeout(() => setIsBlurred(false), 1000);
+  }
+
+  useEffect(() => {
+    if (showPauseIndicator !== 'enter') return;
+    const t = setTimeout(() => setShowPauseIndicator('exit'), 800);
+    const t2 = setTimeout(() => setShowPauseIndicator(null), 1000);
+    return () => { clearTimeout(t); clearTimeout(t2); };
+  }, [showPauseIndicator]);
 
   const colors = [
     { base: 'amber', hex: 'd97706' },
@@ -85,25 +113,17 @@ export function TestimonialsSection() {
     { base: 'yellow', hex: 'ca8a04' },
   ];
   const c = colors[currentIndex % colors.length];
+  const prevColor = colors[(currentIndex - 1 + totalRef.current) % totalRef.current];
+  const nextColor = colors[(currentIndex + 1) % totalRef.current];
 
   return (
     <>
       <div className="md:col-span-9 flex flex-col">
         <TerminalCard title="Testimonials.sh" icon="format_quote" className="flex-1">
-          <div className="p-6 md:p-8 flex-1 flex flex-col">
-            <div className="flex-1 min-h-0 space-y-4">
-              <div className="flex items-start gap-2">
-                <span className="text-emerald-400 mt-0.5 flex-shrink-0">&gt;</span>
-                <div className="max-h-[120px] overflow-y-auto flex-1">
-                  <p className="text-sm md:text-base text-on-surface-variant leading-relaxed font-mono text-justify">
-                    <span className="text-emerald-400/60">&ldquo;</span>
-                    {current.quote}
-                    <span className="text-emerald-400/60">&rdquo;</span>
-                  </p>
-                </div>
-              </div>
-              <div className="pt-4 border-t border-white/5">
-              <div className="flex items-center gap-3">
+          <div className="p-6 md:p-8 flex-1 flex flex-col min-h-[300px]" onClick={togglePause}>
+            <div className="flex-1 min-h-0 space-y-4 relative">
+              <div className={`${isBlurred ? 'blur-sm transition-all duration-200' : ''}`}>
+              <div className="flex items-center gap-3 pb-4 border-b border-white/5">
                 <div
                   className="w-8 h-8 rounded border flex items-center justify-center flex-shrink-0"
                   style={{ borderColor: `#${c.hex}33`, backgroundColor: `#${c.hex}1a` }}
@@ -115,19 +135,72 @@ export function TestimonialsSection() {
                   <span className="text-[10px] font-mono uppercase tracking-widest text-white/40">{current.title}</span>
                 </div>
               </div>
+              <div className="flex items-start gap-2 pt-4">
+                <span className="text-emerald-400 mt-0.5 flex-shrink-0">&gt;</span>
+                <div className="max-h-[120px] overflow-y-auto flex-1">
+                  <p className="text-sm md:text-base text-on-surface-variant leading-relaxed font-mono text-justify">
+                    <span className="text-emerald-400/60">&ldquo;</span>
+                    {current.quote}
+                    <span className="text-emerald-400/60">&rdquo;</span>
+                  </p>
+                </div>
+              </div>
             </div>
+              {showPauseIndicator && (
+                <div className="absolute inset-0 flex items-center justify-center z-10">
+                  <div
+                    className={`flex items-center gap-2 transition-all duration-200 ${
+                      showPauseIndicator === 'enter' ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                    }`}
+                  >
+                    <span className="material-symbols-outlined text-5xl" style={{ color: `#${c.hex}` }}>
+                      {isPaused ? 'pause' : 'play_arrow'}
+                    </span>
+                    <span className="text-2xl font-mono uppercase tracking-widest" style={{ color: `#${c.hex}cc` }}>
+                      {isPaused ? 'paused' : 'resumed'}
+                    </span>
+                  </div>
+                </div>
+              )}
           </div>
           <div className="px-6 pb-4">
-            <div className="flex gap-1.5 justify-center">
-              {testimonials.map((_, i) => (
-                <div
-                  key={i}
-                  className={`h-1 rounded-full transition-all duration-300 ${
-                    i === currentIndex ? 'w-6' : 'w-1 bg-white/20'
-                  }`}
-                  style={i === currentIndex ? { backgroundColor: `#${colors[i].hex}` } : {}}
-                />
-              ))}
+            <div className="flex items-center gap-4 justify-center">
+              <button
+                onClick={(e) => { e.stopPropagation(); goPrev(); }}
+                className="flex items-center justify-center w-7 h-7 rounded border transition-all cursor-pointer"
+                style={{
+                  borderColor: `#${prevColor.hex}33`,
+                  backgroundColor: `#${prevColor.hex}1a`,
+                  color: `#${prevColor.hex}`,
+                }}
+              >
+                <span className="material-symbols-outlined text-lg">chevron_left</span>
+              </button>
+              <div className="flex gap-2">
+                {testimonials.map((_, i) => (
+                  <div
+                    key={i}
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      i === currentIndex ? 'w-8' : 'w-1.5 bg-white/20'
+                    }`}
+                    style={i === currentIndex ? { backgroundColor: `#${colors[i].hex}` } : {}}
+                  />
+                ))}
+              </div>
+              <button
+                onClick={(e) => { e.stopPropagation(); goNext(); }}
+                className="flex items-center justify-center w-7 h-7 rounded border transition-all cursor-pointer"
+                style={{
+                  borderColor: `#${nextColor.hex}33`,
+                  backgroundColor: `#${nextColor.hex}1a`,
+                  color: `#${nextColor.hex}`,
+                }}
+              >
+                <span className="material-symbols-outlined text-lg">chevron_right</span>
+              </button>
+            </div>
+            <div className="flex justify-center mt-2">
+              <span className="text-[9px] font-mono uppercase tracking-widest text-white/20">{isPaused ? 'click to resume' : 'click to pause'}</span>
             </div>
           </div>
           </div>
