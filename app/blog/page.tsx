@@ -44,7 +44,21 @@ export default function BlogPage() {
           </p>
         </header>
 
-        {years.map(year => (
+        {visible.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <div className="font-mono text-[9px] text-zinc-800 mb-3 tracking-widest">
+              // EMPTY
+            </div>
+            <div className="font-mono text-zinc-600 text-[12px] leading-relaxed space-y-3">
+              <p className="text-[10px] text-zinc-700">{'> cat /var/log/blog.log'}</p>
+              <p className="text-[10px] text-zinc-700">{'> '}</p>
+              <p className="text-base font-bold text-red-500/30 py-3">{'[WARN]  No entries found'}</p>
+              <p className="text-sm text-zinc-600/60 pb-3">{'> Coming soon...'}</p>
+              <p className="text-[10px] text-zinc-700">{'> '}</p>
+              <p className="text-[11px] text-zinc-700 animate-pulse">{'_'}</p>
+            </div>
+          </div>
+        ) : years.map(year => (
           <div key={year} className="mb-10">
             <div className="flex items-center gap-2 mb-5 font-mono text-[13px] text-emerald-400/60">
               <span className="text-emerald-500/30">//</span>
