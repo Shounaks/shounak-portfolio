@@ -8,7 +8,8 @@ interface IconMapEntry {
 }
 
 interface TableCSVProps {
-  children: string;
+  children?: string;
+  source?: string;
   iconMap?: string;
   columnColors?: string;
   highlightCol?: string;
@@ -44,6 +45,7 @@ function parseColumnColors(raw: string | undefined): string[] {
 
 export function TableCSV({
   children,
+  source: sourceProp,
   iconMap: iconMapRaw,
   columnColors: columnColorsRaw,
   highlightCol,
@@ -51,7 +53,7 @@ export function TableCSV({
   compact,
   className,
 }: TableCSVProps) {
-  const source = typeof children === 'string' ? children : '';
+  const source = typeof sourceProp === 'string' ? sourceProp : typeof children === 'string' ? children : '';
   const { headers, rows } = parseSource(source);
   const iconMap = parseIconMap(iconMapRaw);
   const columnColorClasses = parseColumnColors(columnColorsRaw);
@@ -84,9 +86,8 @@ export function TableCSV({
               <th
                 key={i}
                 className={cn(
-                  'text-zinc-400 font-bold text-[10px] uppercase tracking-wider',
+                  'text-zinc-200 font-bold text-[10px] uppercase tracking-wider bg-zinc-800/60',
                   compact ? 'px-2 py-1.5' : 'px-3 py-2',
-                  highlightIdx === i && 'text-emerald-400',
                 )}
               >
                 # {header}
@@ -99,9 +100,8 @@ export function TableCSV({
             <tr
               key={rowIdx}
               className={cn(
-                'border-b border-zinc-800/50 transition-colors hover:bg-zinc-800/20',
+                'border-b border-zinc-800/50 transition-colors hover:bg-zinc-700/25',
                 striped && rowIdx % 2 === 1 && 'bg-zinc-900/30',
-                compact ? 'px-2 py-1.5' : 'px-3 py-2',
               )}
             >
               {row.map((cell, colIdx) => (
@@ -111,6 +111,7 @@ export function TableCSV({
                     'text-[12px]',
                     columnColorClasses[colIdx] || 'text-zinc-300',
                     highlightIdx === colIdx && 'font-bold',
+                    compact ? 'px-2 py-1.5' : 'px-3 py-2',
                   )}
                 >
                   {renderCell(cell)}

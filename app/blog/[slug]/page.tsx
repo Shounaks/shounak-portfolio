@@ -1,5 +1,12 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import path from 'path';
+import fs from 'fs';
+import { MDXRemote } from 'next-mdx-remote/rsc';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeShiki from '@shikijs/rehype';
+import { rehypeCodeHeader } from '@/lib/rehype-code-header';
 import { posts } from '#content';
 import { Header } from '@/components/header';
 import { BackgroundCanvas } from '@/components/background-canvas';
@@ -8,6 +15,7 @@ import { CollapsibleSummary } from '@/components/collapsible-summary';
 import { TableOfContents } from '@/components/table-of-contents';
 import { ReadingProgress } from '@/components/reading-progress';
 import { CodeCopyHandler } from '@/components/code-copy-btn';
+import { mdxComponents } from '@/lib/mdx-components';
 
 const tagColors: Record<string, string> = {
   react: 'text-sky-300 border-sky-500/30 bg-sky-500/10',
@@ -31,10 +39,25 @@ export function generateStaticParams() {
   return posts.filter(p => !p.hidden).map((post) => ({ slug: post.slug }));
 }
 
+const mdxOptions = {
+  parseFrontmatter: true,
+  mdxOptions: {
+    rehypePlugins: [
+      rehypeSlug,
+      [rehypeAutolinkHeadings, { behavior: 'wrap' }],
+      [rehypeShiki, { theme: 'github-dark' }],
+      rehypeCodeHeader,
+    ] as any,
+  },
+};
+
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = posts.find((p) => p.slug === slug);
   if (!post || post.hidden) notFound();
+
+  const mdxPath = path.join(process.cwd(), 'content', 'blog', `${slug}.mdx`);
+  const rawMDX = fs.readFileSync(mdxPath, 'utf-8');
 
   return (
     <>
@@ -80,10 +103,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </CollapsibleSummary>
 
             <CodeCopyHandler>
-            <div
-              className="max-w-none font-mono text-base leading-relaxed space-y-8 [&_p]:text-zinc-300 [&_p]:leading-relaxed [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-zinc-100 [&_h2]:tracking-tight [&_h2]:pt-4 [&_h2]:border-b [&_h2]:border-zinc-900 [&_h2]:pb-2 [&_h2]:mb-6 [&_h2]:flex [&_h2]:items-center [&_h2]:gap-2 [&_h2]:before:content-['#'] [&_h2]:before:text-emerald-500/40 [&_h2]:before:select-none [&_h3]:text-lg [&_h3]:font-bold [&_h3]:text-emerald-400 [&_h3]:tracking-tight [&_h3]:pt-2 [&_h3]:mb-3 [&_a]:text-emerald-400 [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-zinc-700 [&_a]:hover:decoration-emerald-400 [&_a]:transition-colors [&_pre]:overflow-x-auto [&_pre]:text-sm [&_pre]:leading-relaxed [&_pre]:p-5 [&_pre]:m-0 [&_pre]:bg-transparent [&_pre]:border-0 [&_code]:text-emerald-300 [&_img]:rounded-lg [&_img]:border [&_img]:border-zinc-800 [&_ul]:text-zinc-300 [&_ol]:text-zinc-300 [&_li]:mb-1"
-              dangerouslySetInnerHTML={{ __html: post.content }}
-            />
+              <div className="max-w-none font-mono text-base leading-relaxed space-y-8 [&_p]:text-zinc-300 [&_p]:leading-relaxed [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-zinc-100 [&_h2]:tracking-tight [&_h2]:pt-4 [&_h2]:border-b [&_h2]:border-zinc-900 [&_h2]:pb-2 [&_h2]:mb-6 [&_h2]:flex [&_h2]:items-center [&_h2]:gap-2 [&_h2]:before:content-['#'] [&_h2]:before:text-emerald-500/40 [&_h2]:before:select-none [&_h3]:text-lg [&_h3]:font-bold [&_h3]:text-emerald-400 [&_h3]:tracking-tight [&_h3]:pt-2 [&_h3]:mb-3 [&_a]:text-emerald-400 [&_a]:underline [&_a]:underline-offset-4 [&_a]:decoration-zinc-700 [&_a]:hover:decoration-emerald-400 [&_a]:transition-colors [&_pre]:overflow-x-auto [&_pre]:text-sm [&_pre]:leading-relaxed [&_pre]:p-5 [&_pre]:m-0 [&_pre]:bg-transparent [&_pre]:border-0 [&_code]:text-emerald-300 [&_img]:rounded-lg [&_img]:border [&_img]:border-zinc-800 [&_ul]:text-zinc-300 [&_ol]:text-zinc-300 [&_li]:mb-1">
+                <MDXRemote
+                  source={rawMDX}
+                  components={mdxComponents}
+                  options={mdxOptions}
+                />
+              </div>
             </CodeCopyHandler>
           </div>
 

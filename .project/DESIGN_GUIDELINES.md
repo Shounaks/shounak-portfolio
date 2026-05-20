@@ -115,8 +115,8 @@ Emerald green (`#34d399` / `#10b981`) is the **primary terminal accent** — not
 | `--spacing-bento-gap` | `1.5rem` (24px) | Gap between bento grid items |
 | `--spacing-margin-mobile` | `1rem` (16px) | Page margins on mobile |
 | `--spacing-margin-desktop` | `2rem` (32px) | Page margins on desktop |
-| Card padding | `p-4` (16px), `p-5` (20px), `p-6` (24px) | TerminalCard content padding |
-| Card header | `px-4 py-2` | TerminalCard header |
+| Card padding | `p-4` (16px), `p-5` (20px), `p-6` (24px) | Component container padding |
+| Card header | `px-4 py-2` | Component container header |
 | Section gap | `gap-1.5` (6px) to `gap-6` (24px) | Flex/grid gaps |
 | Sidebar width | `220px` | Table of contents |
 
@@ -202,13 +202,22 @@ Emerald green (`#34d399` / `#10b981`) is the **primary terminal accent** — not
 - No CSS modules, no styled-components, no SCSS
 
 ### 8.3 Card Wrapper Pattern
-Every content section is wrapped in `<TerminalCard>`:
+`<TerminalCard>` is for **component containers only** — live demos, interactive examples, and component previews on the `/components` page. Do NOT use for text content (paragraphs, summaries, key takeaways). Use `<Callout>` instead for textual highlights.
+
+Component container example:
 ```tsx
 <TerminalCard title="SectionName.sh" icon="icon_name" variant="primary|secondary">
   <div className="font-mono text-[12px] p-4">
-    {/* Terminal-prompted content */}
+    {/* Interactive component preview */}
   </div>
 </TerminalCard>
+```
+
+Text highlight alternative:
+```mdx
+<Callout type="info" title="Key Takeaways">
+  Bullet points or paragraphs here.
+</Callout>
 ```
 
 ---

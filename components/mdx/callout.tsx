@@ -40,10 +40,38 @@ interface CalloutProps {
   type?: keyof typeof calloutStyles;
   title?: string;
   children: ReactNode;
+  list?: 'ol' | 'ul';
   className?: string;
 }
 
-export function Callout({ type = 'note', title, children, className }: CalloutProps) {
+function parseListItems(children: ReactNode, type: 'ol' | 'ul'): ReactNode {
+  if (typeof children !== 'string') return children;
+
+  const items = children
+    .split('\n')
+    .map(l => l.trim())
+    .filter(Boolean)
+    .map(l => l.replace(/^(\d+[\.\)]?\s*|[-*]\s*)/, ''));
+
+  if (items.length === 0) return children;
+
+  const ListTag = type === 'ol' ? 'ol' : 'ul';
+
+  return (
+    <ListTag className="list-none space-y-2 pl-0">
+      {items.map((item, i) => (
+        <li key={i} className="flex items-start gap-2">
+          <span className="text-emerald-500/60 shrink-0 mt-0.5">
+            {type === 'ol' ? `${i + 1}.` : '—'}
+          </span>
+          <span>{item}</span>
+        </li>
+      ))}
+    </ListTag>
+  );
+}
+
+export function Callout({ type = 'note', title, children, list, className }: CalloutProps) {
   const style = calloutStyles[type];
 
   return (
@@ -67,7 +95,7 @@ export function Callout({ type = 'note', title, children, className }: CalloutPr
         </span>
       </div>
       <div className="text-zinc-300 text-[13px] leading-relaxed pl-4">
-        {children}
+        {list ? parseListItems(children, list) : children}
       </div>
     </div>
   );

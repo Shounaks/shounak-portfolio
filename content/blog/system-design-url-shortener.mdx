@@ -6,22 +6,10 @@ hidden: true
 tags: [system-design]
 ---
 
-<TerminalCard title="Executive Summary">
+<Callout type="info" title="Executive Summary">
 A URL shortener maps long URLs into short, unique aliases. When a user visits the short link, the system issues an HTTP 301/302 redirect to the original URL. While conceptually simple, production-grade services must handle billions of writes, trillions of redirects, adversarial abuse, and stringent uptime requirements.
-</TerminalCard>
+</Callout>
 
-## Table of Contents
-
-1. Understanding the Domain
-2. Stakeholders & Usage Metrics
-3. Requirement Gathering
-4. Scalability, Reliability, Performance & Cost
-5. Building Blocks
-6. Design Principles & Tradeoffs
-7. Security Architecture
-8. Appendix
-
----
 
 ## 1. Understanding the Domain
 
@@ -36,18 +24,17 @@ A URL shortener is a service that transforms an arbitrarily long URL into a comp
 
 ### 1.2 Competitor Feature Matrix
 
-| Feature | bit.ly | TinyURL | short.io | Ours (target) |
-|---|---|---|---|---|
-| Custom aliases | ✅ | ✅ | ✅ | ✅ |
-| Expiring links | ✅ | ❌ | ✅ | ✅ |
-| Password protection | ✅ | ❌ | ✅ | ✅ |
-| Click analytics | ✅ (free tier limited) | ❌ | ✅ (paid) | ✅ |
-| Geo/device targeting | ✅ | ❌ | ✅ | ❌ (v2) |
-| API-first design | ✅ | ✅ | ✅ | ✅ |
-| Bulk operations | ✅ | ❌ | ✅ | ✅ |
-| Custom domains | ✅ (paid) | ❌ | ✅ (paid) | ✅ |
-| QR code generation | ✅ | ❌ | ✅ | ✅ |
-| Abuse detection | ✅ | ❌ | Limited | ✅ |
+<TableCSV compact source="Feature|bit.ly|TinyURL|short.io|Ours (target)
+Custom aliases|✅|✅|✅|✅
+Expiring links|✅|❌|✅|✅
+Password protection|✅|❌|✅|✅
+Click analytics|✅ (free tier limited)|❌|✅ (paid)|✅
+Geo/device targeting|✅|❌|✅|❌ (v2)
+API-first design|✅|✅|✅|✅
+Bulk operations|✅|❌|✅|✅
+Custom domains|✅ (paid)|❌|✅ (paid)|✅
+QR code generation|✅|❌|✅|✅
+Abuse detection|✅|❌|Limited|✅" />
 
 ### 1.3 Who Uses It?
 
@@ -558,11 +545,11 @@ Client          DNS/LB          Redirect Pod        Redis         PostgreSQL
 
 ---
 
-<TerminalCard title="Key Takeaways">
+<Callout type="info" title="Key Takeaways" list="ol">
 1. Pre-compute keys to avoid write-path contention at scale.
 2. Cache aggressively — 99.9% of traffic is reads; a millisecond saved at the cache layer saves thousands in compute.
 3. CQRS separates the hot redirect path from the cold analytics path — different storage engines, different scaling properties.
 4. Security must be embedded from day one: key generation must be non-guessable, every endpoint rate-limited, and every URL scanned before creation.
 5. Plan for multi-region on day one — even if you only deploy one region, the architecture must not assume regional locality.
-</TerminalCard>
+</Callout>
 

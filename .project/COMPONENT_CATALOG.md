@@ -16,7 +16,7 @@
 
 ## Layout Components
 
-### TerminalCard — Core Wrapper
+### TerminalCard — Component Container Wrapper
 
 | Field | Details |
 |-------|---------|
@@ -26,6 +26,7 @@
 | **Variants** | `primary` — purple glow (`#d0bcff`), `secondary` — gold glow (`#e9c349`) |
 | **States** | Default → Hover (traffic light dots colorize, header text saturates, mouse spotlight activates) |
 | **Features** | Glassmorphism background, mouse-following spotlight radial gradient, header shine effect, macOS traffic light dots, backdrop blur |
+| **Usage** | **Component containers only** — wraps live demos, interactive examples, and component previews on the `/components` page. Do NOT use for text content (paragraphs, summaries, key takeaways). Use `<Callout>` instead for textual highlights.
 
 ### BackgroundCanvas — Interactive Background
 

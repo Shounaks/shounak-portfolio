@@ -348,6 +348,7 @@ export default function ComponentsPage() {
               <PropTable props={[
                 { name: 'type', type: "'note' | 'info' | 'warn' | 'error'", default: 'note', description: 'Callout variant' },
                 { name: 'title', type: 'string', default: '—', description: 'Optional title override' },
+                { name: 'list', type: "'ol' | 'ul'", default: '—', description: 'Renders children as ordered/unordered list' },
                 { name: 'children', type: 'ReactNode', description: 'Callout body content' },
               ]} />
               <div className="space-y-3 mb-4">
@@ -355,9 +356,19 @@ export default function ComponentsPage() {
                 <Callout type="info" title="KEY INSIGHT">Important conceptual information.</Callout>
                 <Callout type="warn" title="CAUTION">Potential pitfalls and gotchas.</Callout>
                 <Callout type="error" title="CRITICAL">Critical errors and anti-patterns.</Callout>
+                <Callout type="info" title="TAKEAWAYS" list="ol">
+                  1. Lists render as proper numbered items.
+                  2. No need to write HTML tags.
+                  3. Strips numbering automatically.
+                </Callout>
               </div>
               <Code>{`<Callout type="info" title="Key Insight">
   Important conceptual information.
+</Callout>
+
+<Callout type="info" title="Takeaways" list="ol">
+  1. First item
+  2. Second item
 </Callout>`}</Code>
 
               {/* Banner */}
@@ -642,6 +653,7 @@ const rows = [
               </h3>
               <PropTable props={[
                 { name: 'children', type: 'string', description: 'Pipe-delimited table data (first line = headers, rest = rows)' },
+                { name: 'source', type: 'string', default: '—', description: 'Alternative to children — multiline prop (MDX-safe)' },
                 { name: 'iconMap', type: 'string', default: '—', description: 'Sem;colon,separated: TOKEN,icon_name,color_class' },
                 { name: 'columnColors', type: 'string', default: '—', description: 'Comma-separated text color classes per column' },
                 { name: 'highlightCol', type: 'string', default: '—', description: 'Header name to highlight' },
@@ -649,31 +661,30 @@ const rows = [
                 { name: 'compact', type: 'boolean', default: 'false', description: 'Reduced cell padding' },
               ]} />
               <p className="font-mono text-[12px] text-zinc-400 mb-4 leading-relaxed">
-                Data is passed as <strong>children</strong> (safe for MDX parser). Tokens in cells are mapped to Material Symbol icons via <code className="text-emerald-300">iconMap</code>.
+                Data is passed as <strong>children</strong> (TSX) or <strong>source</strong> prop (MDX). Tokens in cells are mapped to Material Symbol icons via <code className="text-emerald-300">iconMap</code>.
               </p>
               <TableCSV
                 iconMap="UP,check_circle,text-emerald-400;DEGRADED,warning,text-amber-400;DOWN,error,text-red-400"
                 columnColors="text-zinc-300,text-zinc-300,text-zinc-300,text-zinc-500"
                 highlightCol="Status"
                 striped
-              >
-Service | Status | Uptime | Region
+                source={`Service | Status | Uptime | Region
 api-gateway | UP | 99.99 | us-east
 auth-service | UP | 99.97 | eu-west
 db-primary | DEGRADED | 98.50 | us-east
 cache-cluster | UP | 99.99 | ap-southeast
-analytics-worker | DOWN | 95.20 | us-east
-              </TableCSV>
-              <Code>{`<TableCSV
-  iconMap="UP,check_circle,text-emerald-400;DOWN,error,text-red-400"
-  columnColors="text-zinc-300,text-zinc-300,text-zinc-300"
-  highlightCol="Status"
-  striped
->
+analytics-worker | DOWN | 95.20 | us-east`}
+              />
+              <Code>{`// TSX — use children:
+<TableCSV iconMap="..." columnColors="..." highlightCol="Status" striped>
 Service | Status | Uptime
 api-gateway | UP | 99.99
-auth-service | DEGRADED | 98.50
-</TableCSV>`}</Code>
+</TableCSV>
+
+// MDX — use source prop:
+<TableCSV source="Service|Status|Uptime
+api-gateway|UP|99.99
+auth-service|DEGRADED|98.50" />`}</Code>
             </section>
 
             {/* ── Typography ── */}
