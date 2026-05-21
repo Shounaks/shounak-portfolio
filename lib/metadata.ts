@@ -14,14 +14,15 @@ export function baseMetadata(): Metadata {
       siteName,
       title: siteName,
       description: defaultDescription,
-      images: [{ url: '/og-default.png', width: 1200, height: 630 }],
+      images: [{ url: '/am_blueprint.png', width: 1200, height: 630 }],
     },
     twitter: {
       card: 'summary_large_image',
       title: siteName,
       description: defaultDescription,
-      images: ['/og-default.png'],
+      images: ['/am_blueprint.png'],
     },
+    other: { 'og:logo': '/am_blueprint.png' },
   }
 }
 
@@ -36,7 +37,7 @@ export function blogMetadata(post: {
   const description = post.excerpt || defaultDescription
   const images = post.image
     ? [{ url: post.image, width: 1200, height: 630 }]
-    : [{ url: '/og-default.png', width: 1200, height: 630 }]
+    : [{ url: '/am_blueprint.png', width: 1200, height: 630 }]
 
   return {
     title: `${post.title} — Shounak Bhalerao`,
@@ -50,6 +51,7 @@ export function blogMetadata(post: {
       siteName,
       publishedTime: post.date,
     },
+    other: { 'og:logo': '/am_blueprint.png' },
     twitter: {
       card: 'summary_large_image',
       title: post.title,
@@ -99,6 +101,6 @@ export function jsonLdBlogPosting(post: {
       name: 'Shounak Bhalerao',
       url: siteUrl,
     },
-    image: post.image || '/og-default.png',
+    image: post.image || '/am_blueprint.png',
   }
 }
