@@ -1,0 +1,74 @@
+---
+title: Agent Skills & MCP Setup for opencode
+date: 2026-05-26
+excerpt: A guide to installing agent skills and configuring MCP servers for opencode.
+tags: [opencode, skills, mcp, llm]
+---
+
+## Adding Skills to opencode
+
+Skills extend opencode's capabilities. Browse available skills at [mcpservers.org/agent-skills](https://mcpservers.org/agent-skills).
+
+### Planning
+
+```bash
+npx skills add https://github.com/mattpocock/skills --skill grill-me
+npx skills add https://github.com/mattpocock/skills --skill grill-with-docs
+npx skills add https://github.com/mattpocock/skills --skill to-prd
+npx skills add https://github.com/mattpocock/skills --skill review
+```
+
+### Agentic Development
+
+```bash
+npx skills add https://github.com/vercel-labs/skills --skill find-skills
+npx skills add https://github.com/anthropics/skills --skill mcp-builder
+```
+
+### Security Review
+
+```bash
+npx skills add https://github.com/getsentry/skills --skill security-review
+npx skills add https://github.com/github/awesome-copilot --skill agent-owasp-compliance
+```
+
+### Frontend
+
+```bash
+npx skills add https://github.com/pbakaus/impeccable --skill impeccable
+npx skills add https://github.com/anthropics/skills --skill algorithmic-art
+```
+
+### Cybersecurity
+
+```bash
+npx skills add mukul975/Anthropic-Cybersecurity-Skills
+npx skills add https://github.com/anthropics/skills --skill frontend-design
+```
+
+## MCP Server Configuration
+
+Add these MCP servers to your `opencode.json`:
+
+```json
+{
+  "mcpServers": {
+    "next-devtools-mcp": {
+      "type": "local",
+      "command": ["npx", "-y", "next-devtools-mcp@latest"],
+      "enabled": true
+    },
+    "tailwind-mcp": {
+      "type": "local",
+      "command": ["npx", "-y", "tailwindcss-mcp-server"],
+      "enabled": true
+    },
+    "shadcn": {
+      "type": "local",
+      "command": ["npx", "shadcn@latest", "mcp"],
+      "enabled": true
+    }
+  },
+  "lsp": true
+}
+```

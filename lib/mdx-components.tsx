@@ -14,6 +14,7 @@ import { TableCSV } from '@/components/mdx/table-csv';
 import { Figure } from '@/components/mdx/figure';
 import { Quote } from '@/components/mdx/quote';
 import { Tip } from '@/components/mdx/tip';
+import { Columns } from '@/components/mdx/columns';
 
 export const mdxComponents = {
   TerminalCard,
@@ -33,4 +34,5 @@ export const mdxComponents = {
   Figure,
   Quote,
   Tip,
+  Columns,
 };

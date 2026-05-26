@@ -7,7 +7,7 @@
 
   <!-- Shard Registry -->
   <rect x="220" y="10" width="200" height="56" rx="8" fill="none" stroke="#059669" stroke-width="2"/>
-  <text x="320" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="bold" fill="currentColor">Shard Registry</text>
+  <text x="320" y="32" text-anchor="middle" font-family="system-ui, sans-serif" font-size="14" font-weight="bold" fill="#e4e4e7">Shard Registry</text>
   <text x="320" y="52" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#666">tenant → shard mapping</text>
 
   <!-- Arrows from registry to shards -->
@@ -22,16 +22,16 @@
   <!-- Shard A -->
   <g transform="translate(10, 115)">
     <rect x="0" y="0" width="180" height="230" rx="8" fill="none" stroke="#059669" stroke-width="2"/>
-    <text x="90" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="bold" fill="currentColor">Shard A</text>
+    <text x="90" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="bold" fill="#e4e4e7">Shard A</text>
 
     <rect x="10" y="30" width="160" height="36" rx="4" fill="#059669" opacity="0.1" stroke="#059669" stroke-width="1"/>
-    <text x="90" y="53" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="currentColor">Service</text>
+    <text x="90" y="53" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#e4e4e7">Service</text>
 
     <rect x="10" y="74" width="160" height="36" rx="4" fill="#059669" opacity="0.1" stroke="#059669" stroke-width="1"/>
-    <text x="90" y="97" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="currentColor">Database</text>
+    <text x="90" y="97" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#e4e4e7">Database</text>
 
     <rect x="10" y="118" width="160" height="36" rx="4" fill="#059669" opacity="0.1" stroke="#059669" stroke-width="1"/>
-    <text x="90" y="141" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="currentColor">Queue / Cache</text>
+    <text x="90" y="141" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#e4e4e7">Queue / Cache</text>
 
     <text x="90" y="182" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#666">Tenant Group A</text>
     <text x="90" y="198" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#666">(1–500)</text>
@@ -40,16 +40,16 @@
   <!-- Shard B -->
   <g transform="translate(230, 115)">
     <rect x="0" y="0" width="180" height="230" rx="8" fill="none" stroke="#059669" stroke-width="2"/>
-    <text x="90" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="bold" fill="currentColor">Shard B</text>
+    <text x="90" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="bold" fill="#e4e4e7">Shard B</text>
 
     <rect x="10" y="30" width="160" height="36" rx="4" fill="#059669" opacity="0.1" stroke="#059669" stroke-width="1"/>
-    <text x="90" y="53" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="currentColor">Service</text>
+    <text x="90" y="53" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#e4e4e7">Service</text>
 
     <rect x="10" y="74" width="160" height="36" rx="4" fill="#059669" opacity="0.1" stroke="#059669" stroke-width="1"/>
-    <text x="90" y="97" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="currentColor">Database</text>
+    <text x="90" y="97" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#e4e4e7">Database</text>
 
     <rect x="10" y="118" width="160" height="36" rx="4" fill="#059669" opacity="0.1" stroke="#059669" stroke-width="1"/>
-    <text x="90" y="141" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="currentColor">Queue / Cache</text>
+    <text x="90" y="141" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#e4e4e7">Queue / Cache</text>
 
     <text x="90" y="182" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#666">Tenant Group B</text>
     <text x="90" y="198" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#666">(501–1000)</text>
@@ -58,16 +58,16 @@
   <!-- Shard C -->
   <g transform="translate(450, 115)">
     <rect x="0" y="0" width="180" height="230" rx="8" fill="none" stroke="#059669" stroke-width="2"/>
-    <text x="90" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="bold" fill="currentColor">Shard C</text>
+    <text x="90" y="22" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="bold" fill="#e4e4e7">Shard C</text>
 
     <rect x="10" y="30" width="160" height="36" rx="4" fill="#059669" opacity="0.1" stroke="#059669" stroke-width="1"/>
-    <text x="90" y="53" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="currentColor">Service</text>
+    <text x="90" y="53" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#e4e4e7">Service</text>
 
     <rect x="10" y="74" width="160" height="36" rx="4" fill="#059669" opacity="0.1" stroke="#059669" stroke-width="1"/>
-    <text x="90" y="97" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="currentColor">Database</text>
+    <text x="90" y="97" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#e4e4e7">Database</text>
 
     <rect x="10" y="118" width="160" height="36" rx="4" fill="#059669" opacity="0.1" stroke="#059669" stroke-width="1"/>
-    <text x="90" y="141" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="currentColor">Queue / Cache</text>
+    <text x="90" y="141" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="#e4e4e7">Queue / Cache</text>
 
     <text x="90" y="182" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#666">Tenant Group C</text>
     <text x="90" y="198" text-anchor="middle" font-family="system-ui, sans-serif" font-size="11" fill="#666">(1001–1500)</text>

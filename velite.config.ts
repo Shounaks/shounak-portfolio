@@ -24,7 +24,7 @@ export const posts = defineCollection({
         rehypeCodeHeader,
       ],
     }),
-    headings: s.toc(),
+    headings: s.toc({ maxDepth: 3 }),
   }),
 });
 

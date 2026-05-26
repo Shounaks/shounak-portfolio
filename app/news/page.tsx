@@ -29,9 +29,15 @@ const broadcasts = [
   //   body: 'Published three new open-source tools for terminal UI enthusiasts. Check out terminal-log, react-glitch-text, and use-typewriter hooks.',
   // },
   {
+    date: '2026-05-25',
+    type: 'BROADCAST',
+    title: 'LLM Skills Setup: Agentic Toolkit Installed',
+    body: 'Configured a comprehensive LLM agent skill suite for development workflows. See https://mcpservers.org/agent-skills for reference.',
+  },
+  {
     date: '2026-05-17',
     type: 'RELEASE',
-    title: 'Portfolio v1.0 — Terminal-Inspired Portfolio Launched',
+    title: 'Portfolio v1.0: Terminal-Inspired Portfolio Launched',
     body: 'Shipped a fully responsive, terminal-themed portfolio built with Next.js 16, MDX blog via Velite, animated architecture diagrams, and a hacker-ui component showcase. Features real resume data, 10 LinkedIn testimonials, and bento-grid layout with dynamic breadcrumbs and code diff views.',
   },
 ];
@@ -78,7 +84,7 @@ export default function NewsPage() {
           </div>
         ) : (
         <div className="space-y-4">
-          {broadcasts.map((b) => (
+          {[...broadcasts].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((b) => (
             <div key={b.date} className="group relative rounded-lg border border-zinc-900 bg-black p-5 md:p-6 space-y-3 transition-all duration-300 hover:border-zinc-800 hover:shadow-[0_0_20px_rgba(0,0,0,0.8)]">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
                 <div className="flex items-center gap-3 min-w-0 flex-1">

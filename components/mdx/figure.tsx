@@ -17,9 +17,10 @@ interface FigureProps {
   children?: ReactNode;
   className?: string;
   size?: keyof typeof sizeClasses;
+  bg?: string;
 }
 
-export function Figure({ src, alt, caption, children, className, size = 'large' }: FigureProps) {
+export function Figure({ src, alt, caption, children, className, size = 'large', bg }: FigureProps) {
   const [open, setOpen] = useState(false);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
@@ -57,7 +58,7 @@ export function Figure({ src, alt, caption, children, className, size = 'large' 
     <>
       <figure className={cn('my-6 group', sizeClasses[size], className)}>
         <div
-          className="relative overflow-hidden rounded-lg border border-zinc-800 cursor-pointer bg-zinc-950/50 flex items-center justify-center"
+          className={cn("relative overflow-hidden rounded-lg border border-zinc-800 cursor-pointer flex items-center justify-center", bg || 'bg-zinc-950/50')}
           onClick={() => setOpen(true)}
         >
           {content}
@@ -85,7 +86,7 @@ export function Figure({ src, alt, caption, children, className, size = 'large' 
             <X className="size-6" />
           </button>
           <div
-            className="p-4 leading-none"
+            className={cn("p-4 leading-none", bg)}
             onClick={(e) => e.stopPropagation()}
           >
             {expandedContent}

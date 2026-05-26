@@ -13,6 +13,7 @@ import { Tip } from '@/components/mdx/tip';
 import { Quote } from '@/components/mdx/quote';
 import { Popup } from '@/components/mdx/popup';
 import { Grid, GridItem } from '@/components/mdx/grid';
+import { Columns } from '@/components/mdx/columns';
 import { ColorPalette } from '@/components/mdx/color-palette';
 import { Table } from '@/components/mdx/table';
 import { TreeTable } from '@/components/mdx/tree-table';
@@ -446,6 +447,41 @@ export default function ComponentsPage() {
     Right column content
   </GridItem>
 </Grid>`}</Code>
+
+              {/* Columns */}
+              <h3 className="font-mono text-[15px] text-emerald-400 font-bold mb-3 mt-8 flex items-center gap-2">
+                <span className="text-emerald-500/60">&gt;</span>
+                Columns
+                <span className="text-[9px] text-zinc-600 font-mono">— Minimal two-column layout</span>
+              </h3>
+              <PropTable props={[
+                { name: 'children', type: 'ReactNode', description: 'Column content (each direct child is a column)' },
+                { name: 'first', type: "'left' | 'center' | 'right'", default: 'left', description: 'Text alignment in first column' },
+                { name: 'second', type: "'left' | 'center' | 'right'", default: 'left', description: 'Text alignment in second column' },
+                { name: 'className', type: 'string', default: '—', description: 'Additional Tailwind classes' },
+              ]} />
+              <p className="font-mono text-[12px] text-zinc-400 mb-4 leading-relaxed">
+                A bare two-column grid with no background, border, or decoration. Each direct child becomes a column.
+                Stacks to single column on mobile.
+              </p>
+              <Columns first="center" second="right">
+                <div className="font-mono text-[13px] text-zinc-300 space-y-2">
+                  <div className="text-emerald-400 text-[11px] font-bold">// First column (center)</div>
+                  <p>Plain text with no wrapper decorations. Works with any content — paragraphs, lists, code, components.</p>
+                </div>
+                <div className="font-mono text-[13px] text-zinc-300 space-y-2">
+                  <div className="text-emerald-400 text-[11px] font-bold">// Second column (right)</div>
+                  <p>Responsive — collapses to single column on mobile screens. Use <code className="text-emerald-300">gap-6</code> by default.</p>
+                </div>
+              </Columns>
+              <Code>{`<Columns first="center" second="right">
+  <div>
+    First column content (centered)
+  </div>
+  <div>
+    Second column content (right-aligned)
+  </div>
+</Columns>`}</Code>
 
               {/* HoverCard */}
               <h3 className="font-mono text-[15px] text-emerald-400 font-bold mb-3 mt-8 flex items-center gap-2">
