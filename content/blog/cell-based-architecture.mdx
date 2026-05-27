@@ -191,6 +191,44 @@ The key property is that cells are *hermetic*. They do not communicate with each
   Hermetic isolation means deployment, failure, and scaling are all cell-local. This yields concrete **benefits** across the entire operational lifecycle.
 </Callout>
 
+### The cell boundary is a one-way door
+Once you define what lives inside a cell, you're commited. Changes to this design, once deployed, means redeployment of cells, which can be REALLY EXPENSIVE!
+
+#### 1. No borrowing or fallback available
+If a service inside a specific cell crashes, then there is no redundancy within that cell. The customer within that cell lose that service.
+We cannot route those request to the service from another cell. That would violate the isolation boundary. The cell must be self-sufficient or it's broken.
+
+This is basically different from actual microservice wherein a failing service can be routed around. In CBA, the cell boundary is a hard-wall. What's inside must be complete.
+One mitigation we can create is to add redundancies and fail-safes inside the boundary, which again increases the cost of managing and operating the cell.
+
+#### 2. The "what goes inside the cell" decision is irreversible at scale
+If you decide Identity lives outside cell (at L1/global), every cell depends on a shard service, and you've re-introduced a fleet-wide blast radius for auth-failures.
+
+<Callout type="info" title="→ Why cells work">
+  I've been in a HOT/Incident room (Sev 1) where the identity service went down, leading to complete collapse of authorisation requests throughout the infrastructure. 
+  Note that this problem is not specific to Cells, but if we are keeping auth outside as global service, we need to understand the side-effects of that decision.
+</Callout>
+
+If we decide Identity lives inside the cell, you now have copies of identity to maintain and the cross cell operation (what if the user can belong to multiple orgs? wouldnt that cause data replication?!), which were already complex, now become a nightmare to work on architecturally.
+
+Neither Choice is right or wrong, but both will be permanant. Like I said before, we cannot easily move a service from cell-local to global or vice versa once tenants are running.
+
+#### 3. Iternal failure modes get comple
+In a non-cell world, if your DB hits a connection limit, you can fail over to a read replica, perhaps in another AZ, or load-shed to another instance. Inside the cell our options are bounded, thus
+our cell-internal architecture must be over-engineered for resilience. That means:
+- More Replicas
+- Faster Failovers
+- Tighter Circuit Breakers
+
+Because there is no help coming from outside the cell.
+
+#### 4. Cell design is Fleet Design
+Each cell is created from a blueprint called archetype. Think of it as a way to specify what each cell contains, including services, connections, permissions, replications, configurations, and a lot more.
+A flaw in this archetype will propogate itself in the whole fleet. For example if we under-provision the DB connection pool in the archetype, every cell will have the same ceiling. If we forgot to have a 
+caching layer, no cell have one (a scary thought!). 
+
+Remember, Blueprints are expensive to change once your city is already bustling with people and traffic.
+
 ### Benefits of CBA
 
 Because deployments are cell-local, blast radius shrinks naturally. Because cells are stampable, regulated environments become composable. Because cells are independent, capacity planning becomes predictable.
@@ -226,6 +264,119 @@ For most B2B SaaS companies, the crossover point where cells become worthwhile i
 <Callout type="info" title="→ The compliance dividend">
   While costs are real, one domain where CBA's isolation pays for itself many times over is **regulatory compliance** - where cells transform platform forks into topology stamps.
 </Callout>
+
+## Things That Don't Fit Into Cells
+Cells promise hermetic isolation. But the moment you have a real product, you discover that some concerns are inherently cross-cell.
+
+### Billing Aggregates across a customer's entire footprint
+A customer's bill is the complete sum of usages for all their workloads, which may span multiple cells if they have multiple products or multiple sites. Billing state is org-scoped, not cell scoped.
+
+### Identity & Authentication
+A user logs in before you know which cell their org lives in. the auth check itself cant live inside the destination cell, You need it before routing. Same for SSO Sessions, MFA state and account level operations.
+
+### Abuse Detection (needs a fleet-wide, company-wide detection)
+Any bad actor distributing request across cell can look fine from inside any cell. But from outside, the pattern will be visible.
+
+### Entitlements & Liscencing
+Wheather a customer is on the Premium plan is a fact about the customer, not about any one cell. If you replicate them into every cell, you need a distributed acreement protocol to update plans, which is crazy, but also the cross cell coordination, we are trying to avoid.
+
+### Analytics & Data Warehousing
+You cant run cross-tenant analytics from inside a cell. Building a usage dashboard for the company require ETL pipelines that aggregate every cell data into a different analytical store.
+
+### The Observablity Control Plane
+We need to have a Dashboard/s that looks across all the cells and provides us with charts, alerts, on-call routing to be usefull. Per-Cell dashboards are not as good. A better way is to add a `X-Cell-Id` to drill-down on per-cell metrics!
+
+CBA doesn't eliminate these, it rather forces you to name, isolate and design them deleberately as a seperate tier. Now comes the real twist!
+CBA isnt "everything lives in a cell". Its a Two-Tier Architecture where most things (archetyped) live in cells, and a small carefully bounded set of services,
+live above them (as in providing service to all the cells).
+
+## The Iterative Adoption Path
+Now that we have a general idea on what and how a CBA is. Lets talk about how or when should we consider this architecture. (The Burning Question everyone might have at this point).
+
+Cells are a destination and not a starting point. Using it from Day 1 is over-engineering. But building a system that cannot evolve thwards cells is a different kind of mistake, which will require a "Refactor"  type of application migration,
+in which we need to recreate working system from ground up in order to ensure that extra items and in-place isolation logic is removed.
+
+<Callout type="warn" title="Multi-Tenant SaaS Migration">
+  Think of a multi-tenant SaaS using distributed database, and for each tenant they filter `tenant_id` for retriving their records.
+  Not only the SQL logic will be redundant had it been in cell. But also the way optimizations were done in order to ensure that any other tenant is not hogging resources.
+  Now all the resources in a cell will belong to this tenant (assuming we go one cell per org/client). In that case we might also need configuration to tweak resource allocation based
+  on tenant's usage. (all these discussions need to happen, while creating the archetype).
+</Callout>
+
+TL;DR : The cost of "cell-ready" design is small, The cost of retrofitting a system that wasnt designed for it is enormous.
+
+### Stage 1: Tenant Context in Every Request
+	
+	Goal: Every request that enters your system carries a clear un-ambigious tenant identifier, and every downstream propogats it. In order to be simple, your API Gateway / Identity Service, would automatically append this for each request based on your login, This will allow the request from outside to not be affected by this complexity.
+	
+	This matters because, every later stage (sharding, routing, cells) require this. Retrofitting it across a codebase that "has" or "knew"  the tenant from the session state / URL parsing is one of the most painful migrations engineer ever will have to undertake.
+	And I pray for you if you are the unlucky person doing it.  Doing it from day 1, costs almost nothing.
+	
+### State 2: Pick a Sharding Key (Even if you dont Shard yet)
+	Goal: Choose the attribute by which your system will be partitioned, and start designing around it.
+	
+	You may (currently) have one database and one deployment, which is a good starting point. But ask: 
+	<Quote from="A Good Engineer">
+		If I had to split this in per-tenant way what would i split on? What would provide our customers/tenants most benifit? 
+	</Quote>
+	The answer should be in form of Org, Workspace, Region, Customer Tier, or something else entirely based on your requirement.
+	
+	Then start writing code for it:
+	- Queries scope by sharding key (No Cross Tenant `SELECT * FROM customer_table` allowed
+	- API Require `X-Sharding-Key` or `X-Sharding-Id` or whatever you wanna call it.
+	- Background jobs are partitioned by your key
+	- Caches are keyed (important, we dont wanna send stored data of a Tenanted Hospital application to that of a Tenanted Jail System.
+	
+	You are not building shards, rather a system that could be sharded without "ReWrite"-ing the data access layer.
+	
+### Stage 3: Service-Level Sharding
+	Shard the services which are hitting the scaling wall. And use this migration experience as a template.
+	Still, at this point you dont need cells. What you need is to split overloaded databases, and noisy services, and Queues.
+	Use the routing key you selected in stage 2 to route your traffic.
+	
+	But while you're at it create a pattern:
+		- A `Tenant-To-Shard` lookup service (even if there is only 2 shards)
+		- A routing layer that hides shard topology from consumers.
+		- Per shard observablity (as said earlier)
+		- Perhaps, a migration tool to automate this!
+	
+### Stage 4: Standardize on One Routing Key Across Service
+	Standardize on one routing key across services
+	
+	Goal: Stop letting each service pick its own sharding key!
+	
+	This is the turning-point! By now you should have atleast 3-5 sharded services, and each picked the key that was easiest for them.
+	For Example: One uses `orgId`, another uses `workspaceId` while the third uses `customerId`. 
+	
+	!!!! STOP !!!!
+	
+	Pick one key that all the service will align to. Migrate service to as they need re-architecting. This is slow-work, but needs to be done. Either Proactively or reactively.
+	
+	Atlassian learned this the hard way. After years of sharding , services had drifterd into differetn keys, and converging them became one of the largest costs of CBA Adoption.
+	
+### Stage 5: "Its Alive..." Your First Cell
+	Goal: Stamp out a cell for a specific, concrete problem.
+	Dont build cells "for the future". BUild the first cell when you have real present need:
+	- A regulated customer who needs data isolation (FedRAMP, sovereignity)
+	- A Geographic Expansion that requires a seperate region
+	- A noisy enterprise customer who needs dedicated capacity
+	
+### Stage 6: Cell Fleet
+	Goal: Multiple cells, progressive deployment, automatd tenant placement.
+	
+	Now you're at a LARGE COMPANY Problem. Build the platform: Cell Hydration, Archetype management, Tenant Placement, Service Migration Tooling, Observablity across cells.
+	This is Years of work.
+
+### The Decision Framework
+A simple test when to move to the next stage:
+<TableCSV source="Step | Explaination
+Stage 1 → 2 | When you have more than one service that needs to know about tenants.
+Stage 2 → 3 | When one service genuinely cannot scale further without sharding.
+Stage 3 → 4 | When you have more than two sharded services and they're drifting.
+Stage 4 → 5 | When you have a customer or compliance requirement that single deployment cannot satisfy.
+Stage 5 → 6 | When you have more than one cell and managing them manually has become a bottleneck.
+
+" />
 
 ## CBA, GovCloud, and Regulatory Boundaries
 
